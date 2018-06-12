@@ -11,18 +11,18 @@ const {
 
 /* eslint-disable no-restricted-syntax, guard-for-in, no-unused-vars */
 // Q1 (*)
-describe('simpleIterable', () => {
+describe.only('simpleIterable', () => {
   test('should not be a generator function', () => {
     expect(simpleIterable.constructor.name).not.toBe('GeneratorFunction');
   });
 
   test('should have a Symbol.iterator method', () => {
-    const iterable = simpleIterable();
+    const iterable = simpleIterable;
     expect(typeof iterable[Symbol.iterator]).toBe('function');
   });
 
   test('Symbol.iterator method creates an iterator', () => {
-    const iterable = simpleIterable();
+    const iterable = simpleIterable;
     const iterator = iterable[Symbol.iterator]();
     expect(typeof iterator.next).toBe('function');
   });
