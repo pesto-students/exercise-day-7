@@ -29,7 +29,7 @@ describe('2 aperture', () => {
   });
 });
 
-describe('3 concat', () => {
+describe.only('3 concat', () => {
   it('adds combines the elements of the two lists', () => {
     expect(concat(['a', 'b'], ['c', 'd'])).toEqual(['a', 'b', 'c', 'd']);
     expect(concat([], ['c', 'd'])).toEqual(['c', 'd']);
