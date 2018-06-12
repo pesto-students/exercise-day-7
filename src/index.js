@@ -51,17 +51,12 @@ class ConsumableUsers {
   }
   get nextUser() {
     // Implement this according to test spec (for creating iterable)
-    return {
-      [Symbol.iterator]() {
-        const iterator = {
-          next() {
-            return { value: 1, done: false };
-          },
-        };
+    let index = 0;
+    const returnedArray = [];
 
-        return iterator;
-      },
-    };
+    returnedArray.push(this.users[index]);
+    index += 1;
+    return returnedArray;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)

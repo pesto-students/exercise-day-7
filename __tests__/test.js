@@ -86,13 +86,13 @@ describe('Array is a built-in iterable object', () => {
       const iterator = arr[Symbol.iterator];
       const theType = typeof iterator;
 
-      expect(theType).toBe('iterator'); // 1) typeof iterator === 'iterator'?
+      expect(theType).toBe('function'); // 1) typeof iterator === 'iterator'?
     });
 
     it('can be looped with `for-of`, which expects an iterable', () => {
       let count = 0;
       for (const value of arr) { // 2) Would for-of work on a normal Array?
-        count -= 1;
+        count += 1;
       }
 
       expect(count).toBe(arr.length);
@@ -102,7 +102,7 @@ describe('Array is a built-in iterable object', () => {
   describe('the iterator protocol', () => {
     it('calling `next()` on an iterator returns an object according to the iterator protocol', () => {
       const iterator = arr[Symbol.iterator]();
-      const firstItem = iterator.xyz(); // 3) What is the method to iterate to the next iteration?
+      const firstItem = iterator.next(); // 3) What is the method to iterate to the next iteration?
 
       expect(firstItem).toEqual({
         done: false,
@@ -114,7 +114,7 @@ describe('Array is a built-in iterable object', () => {
     it('the after-last element has done=true', () => {
       const array = [];
       const iterator = array[Symbol.iterator]();
-      const afterLast = iterator.next;
+      const afterLast = iterator.next();
 
       expect(afterLast).toEqual({
         done: true,
@@ -174,8 +174,23 @@ describe('string is a built-in iterable object', () => {
   implemented allows objects to customize their iteration behavior,
   such as what values are looped over in a for..of construct.
 */
-describe.only('A simple iterable without items inside, implementing the right protocol', () => {
-  function iteratorFunction() {}
+describe('A simple iterable without items inside, implementing the right protocol', () => {
+  function iteratorFunction() {
+    let step = 0;
+    const iterator = {
+
+      next() {
+        if (step < 1) {
+          step += 1;
+          // return { done: true };
+        } else {
+          // return {value: '', done: true};
+        }
+      },
+    };
+
+    return iterator;
+  }
 
   describe('the `iteratorFunction` needs to comply to the iterator protocol', () => {
     it('must return an object', () => {
@@ -193,7 +208,8 @@ describe.only('A simple iterable without items inside, implementing the right pr
 
   let iterable;
   beforeEach(() => {
-    iterable = 'iterable';
+    iterable = {};
+    iterable[Symbol.iterator] = iteratorFunction;
   });
 
   describe('the iterable', () => {
@@ -221,12 +237,12 @@ describe.only('A simple iterable without items inside, implementing the right pr
 
     describe('can be converted to an array', () => {
       it('using `Array.from()`', () => {
-        const arr = iterable;
+        const arr = Array.from(iterable);
         expect(Array.isArray(arr)).toBe(true);
       });
 
       it('where `.length` is still 0', () => {
-        const arr = iterable;
+        const arr = Array.from(iterable);
         const {
           length,
         } = arr;
@@ -240,7 +256,7 @@ describe.only('A simple iterable without items inside, implementing the right pr
   Q6: iterator - one example usage. Build an iterable and use it with
   some built-in ES6 constructs.
 */
-describe('Iterator usages', () => {
+describe.only('Iterator usages', () => {
   let usersIterable;
   beforeEach(() => {
     const consumableUsers = new ConsumableUsers();
@@ -248,13 +264,18 @@ describe('Iterator usages', () => {
     function iteratorFunction() {
       return {
         next: () => ({
-          value: consumableUsers.nextUser,
+          value: consumableUsers.nextUser(),
           done: consumableUsers.done,
         }),
       };
     }
 
-    usersIterable = {};
+    usersIterable = {
+      [Symbol.iterator]() {
+        const iterator = iteratorFunction();
+        return iterator;
+      },
+    };
   });
 
   describe('create an iterator/iterable', () => {
