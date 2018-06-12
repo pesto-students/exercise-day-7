@@ -33,10 +33,17 @@ function ackermann(input) {
  * aperture(2, [1, 2, 3, 4, 5]); //=> [[1, 2], [2, 3], [3, 4], [4, 5]]
  * aperture(3, [1, 2, 3, 4, 5]); //=> [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
+ *
  */
 
-function aperture(input) {
-  return input;
+function aperture(a, arr) {
+  let i = 0;
+  const arr2 = [];
+  while (i < (arr.length - (a + 1))) {
+    arr2.push(arr.slice(i, i + a));
+    i += 1;
+  }
+  return arr2;
 }
 
 /* Q3 (*)
