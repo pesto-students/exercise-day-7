@@ -50,7 +50,7 @@ describe('simpleIterable', () => {
 });
 
 // Q2 (*)
-describe.only('generatorIterable', () => {
+describe('generatorIterable', () => {
   test('should be a generator function', () => {
     expect(generatorIterable.constructor.name).toBe('GeneratorFunction');
   });
@@ -83,16 +83,16 @@ describe('Array is a built-in iterable object', () => {
 
   describe('the iterator', () => {
     it('an array has an iterator, which is a function', () => {
-      const iterator = arr[Symbol.iterator];
+      const iterator = arr[Symbol.iterator]();
       const theType = typeof iterator;
-
-      expect(theType).toBe('iterator'); // 1) typeof iterator === 'iterator'?
+      expect(theType).toBe('object'); // 1) typeof iterator === 'iterator'?
     });
 
     it('can be looped with `for-of`, which expects an iterable', () => {
       let count = 0;
-      for (const value of arr) { // 2) Would for-of work on a normal Array?
-        count -= 1;
+      const iterator = arr[Symbol.iterator]();
+      for (const value of iterator) { // 2) Would for-of work on a normal Array?
+        count += 1;
       }
 
       expect(count).toBe(arr.length);
@@ -102,7 +102,7 @@ describe('Array is a built-in iterable object', () => {
   describe('the iterator protocol', () => {
     it('calling `next()` on an iterator returns an object according to the iterator protocol', () => {
       const iterator = arr[Symbol.iterator]();
-      const firstItem = iterator.xyz(); // 3) What is the method to iterate to the next iteration?
+      const firstItem = iterator.next(); // 3) What is the method to iterate to the next iteration?
 
       expect(firstItem).toEqual({
         done: false,
@@ -114,7 +114,7 @@ describe('Array is a built-in iterable object', () => {
     it('the after-last element has done=true', () => {
       const array = [];
       const iterator = array[Symbol.iterator]();
-      const afterLast = iterator.next;
+      const afterLast = iterator.next();
 
       expect(afterLast).toEqual({
         done: true,
