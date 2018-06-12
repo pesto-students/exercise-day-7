@@ -2,7 +2,28 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  let index = 0;
+  const iterable = {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next() {
+      if (index < 5) {
+        index += 1;
+        return {
+          value: index,
+          done: false,
+        };
+      }
+      return {
+        value: undefined,
+        done: true,
+      };
+    },
+  };
+  return iterable;
+}
 
 /* 2 (*)
 Create an iterable using generator function.
