@@ -362,7 +362,7 @@ describe('fibonacci', () => {
 });
 
 // Q8
-describe.only('isIterableEmpty', () => {
+describe('isIterableEmpty', () => {
   test('should not use Array.from', () => {
     expect(/Array.from/gm.test(isIterableEmpty.toString())).toBe(false);
   });
