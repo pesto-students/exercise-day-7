@@ -198,17 +198,17 @@ describe('`Set` API overview', () => {
     // in order to be alike to `Map` `keys()` and `values()`
     // are essentially the same thing for a `Set`.
     it('`keys()`', () => {
-      const allKeys = Object.keys(set);
+      const allKeys = set.keys();
       expect([...allKeys]).toEqual(api);
     });
 
     it('`values()`', () => {
-      const allValues = set.value();
+      const allValues = set.values();
       expect([...allValues]).toEqual(api);
     });
 
     it('`[Symbol.iterator]()`', () => {
-      const iteratorKey = '???';
+      const iteratorKey = Symbol.iterator;
       expect([...set[iteratorKey]()]).toEqual(api);
     });
   });
@@ -226,24 +226,24 @@ describe('`clear()` removes all elements from a Set object.', () => {
   it('set.size', () => {
     set.add('one').add(2);
     set.clear();
-    const expectedSize = 10000000;
+    const expectedSize = 0;
     expect(set.size).toBe(expectedSize);
   });
 
   it('set.entries()', () => {
     set.add('one').add(2);
-    // set.clear;
+    set.clear();
     const { done } = set.entries().next();
     expect(done).toBe(true);
   });
 
   it('set.has()', () => {
-    set.add('one').add(2);
+    set.add('one').add('two');
     expect(set.has(2)).toBe(false);
   });
 
   it('returns `undefined`', () => {
-    const expectedReturn = true;
+    const expectedReturn = undefined;
     expect(set.clear()).toBe(expectedReturn);
   });
 });
