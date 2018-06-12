@@ -17,8 +17,8 @@ describe('`Map` is a key/value map', () => {
 
   it('provides `new Map().set()` to add key+value pair, `get()` to read it by key', () => {
     const map = new Map();
-    map.set('key', null);
-    const value = map.get();
+    map.set('key', 'value');
+    const value = map.get('key');
 
     expect(value).toBe('value'); // Do not change this line
   });
@@ -26,7 +26,7 @@ describe('`Map` is a key/value map', () => {
   it('`has()` tells if map has the given key', () => {
     const map = new Map();
     map.set('key', 'value');
-    const hasIt = map.hazz;
+    const hasIt = map.has('key');
 
     expect(hasIt).toBe(true); // Do not change this line
   });
@@ -35,7 +35,7 @@ describe('`Map` is a key/value map', () => {
     const map = new Map();
     map.set('1', 'one');
     map.set('2', 'two');
-    const mapAsArray = map;
+    const mapAsArray = map.entries().next().value;
 
     expect(mapAsArray).toEqual([ // Do not change this line
       ['1', 'one'],
