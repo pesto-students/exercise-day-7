@@ -98,7 +98,11 @@ const fibonacci = {
 
   Do not use Array.from()
 */
-function isIterableEmpty() {
+function isIterableEmpty(object) {
+  if (typeof object[Symbol.iterator] === 'function') {
+    return false;
+  }
+  return true;
 }
 
 /* 6 (*) (Q9 in tests)
@@ -108,7 +112,12 @@ function isIterableEmpty() {
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(object) {
+  if (object === null) {
+    return false;
+  }
+  return typeof object[Symbol.iterator] === 'function';
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;

@@ -78,7 +78,7 @@ describe('generatorIterable', () => {
 });
 
 // Q3 (*)
-describe.only('Array is a built-in iterable object', () => {
+describe('Array is a built-in iterable object', () => {
   const arr = ['a', 'B', 'see'];
 
   describe('the iterator', () => {
@@ -362,7 +362,7 @@ describe('fibonacci', () => {
 });
 
 // Q8
-describe('isIterableEmpty', () => {
+describe.only('isIterableEmpty', () => {
   test('should not use Array.from', () => {
     expect(/Array.from/gm.test(isIterableEmpty.toString())).toBe(false);
   });
