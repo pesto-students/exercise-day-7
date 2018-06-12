@@ -19,6 +19,8 @@ function ackermann(input) {
   return input;
 }
 
+//
+
 /* Q2 (*)
  * Returns a new list, composed of n-tuples of consecutive elements. If `n` is
  * greater than the length of the list, an empty list is returned.
