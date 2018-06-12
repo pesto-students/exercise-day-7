@@ -2,14 +2,33 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  let index = 1;
+  const iterable = {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next() {
+      if (index <= 5) {
+        index += 1;
+        return { value: index - 1, done: false };
+      }
+      return { value: undefined, done: true };
+    },
+  };
+  return iterable;
+}
 
 /* 2 (*)
 Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let index = 0;
+  while (index < 5) {
+    index += 1;
+    yield index;
+  }
 }
 
 /* 3 (Q6 in tests)
@@ -35,7 +54,21 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  [Symbol.iterator]() {
+    let a = 0;
+    let b = 1;
+    const iterator = {
+      next() {
+        const c = a + b;
+        a = b;
+        b = c;
+        return { value: c, done: false };
+      },
+    };
+    return iterator;
+  },
+};
 
 // 5 (*) (Q8 in tests)
 /*
@@ -47,7 +80,9 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(iterables) {
+  return [...iterables].length;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -56,7 +91,12 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(args) {
+  if (args[Symbol.iterator]) {
+    return true;
+  }
+  return false;
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
@@ -83,7 +123,23 @@ class Cycled extends Array {}
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range() {}
+function range() {
+  // let x = a;
+  // const iterable = {
+  //   [Symbol.iterator]() {
+  //     return this;
+  //   },
+  //   next() {
+  //     const arr = [];
+  //     while (x < b) {
+  //       arr.push(x);
+  //       x += 1;
+  //     }
+  //     return arr;
+  //   },
+  // };
+  // return iterable;
+}
 
 module.exports = {
   simpleIterable,

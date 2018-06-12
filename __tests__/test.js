@@ -83,16 +83,16 @@ describe('Array is a built-in iterable object', () => {
 
   describe('the iterator', () => {
     it('an array has an iterator, which is a function', () => {
-      const iterator = arr[Symbol.iterator];
+      const iterator = arr[Symbol.iterator]();
       const theType = typeof iterator;
 
-      expect(theType).toBe('iterator'); // 1) typeof iterator === 'iterator'?
+      expect(theType).toBe('function'); // 1) typeof iterator === 'iterator'?
     });
 
     it('can be looped with `for-of`, which expects an iterable', () => {
       let count = 0;
       for (const value of arr) { // 2) Would for-of work on a normal Array?
-        count -= 1;
+        count += 1;
       }
 
       expect(count).toBe(arr.length);
@@ -361,7 +361,7 @@ describe('fibonacci', () => {
 });
 
 // Q8
-describe('isIterableEmpty', () => {
+describe.only('isIterableEmpty', () => {
   test('should not use Array.from', () => {
     expect(/Array.from/gm.test(isIterableEmpty.toString())).toBe(false);
   });
