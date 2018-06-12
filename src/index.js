@@ -24,9 +24,10 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  let index = 1;
-  while (index <= 5) {
-    yield index += 1;
+  let index = 0;
+  while (index < 5) {
+    index += 1;
+    yield index;
   }
 }
 
@@ -79,7 +80,9 @@ const fibonacci = {
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(iterables) {
+  return [...iterables].length;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -120,22 +123,22 @@ class Cycled extends Array {}
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range(a, b) {
-  let x = a;
-  const iterable = {
-    [Symbol.iterator]() {
-      return this;
-    },
-    next() {
-      const arr = [];
-      while (x < b) {
-        arr.push(x);
-        x += 1;
-      }
-      return arr;
-    },
-  };
-  return iterable;
+function range() {
+  // let x = a;
+  // const iterable = {
+  //   [Symbol.iterator]() {
+  //     return this;
+  //   },
+  //   next() {
+  //     const arr = [];
+  //     while (x < b) {
+  //       arr.push(x);
+  //       x += 1;
+  //     }
+  //     return arr;
+  //   },
+  // };
+  // return iterable;
 }
 
 module.exports = {
