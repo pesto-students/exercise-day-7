@@ -24,7 +24,10 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let index = 1;
+  while (index <= 5) {
+    yield index += 1;
+  }
 }
 
 /* 3 (Q6 in tests)
@@ -85,7 +88,12 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(args) {
+  if (args[Symbol.iterator]) {
+    return true;
+  }
+  return false;
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
@@ -112,7 +120,23 @@ class Cycled extends Array {}
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range() {}
+function range(a, b) {
+  let x = a;
+  const iterable = {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next() {
+      const arr = [];
+      while (x < b) {
+        arr.push(x);
+        x += 1;
+      }
+      return arr;
+    },
+  };
+  return iterable;
+}
 
 module.exports = {
   simpleIterable,
