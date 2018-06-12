@@ -16,7 +16,15 @@
  */
 
 function ackermann(input) {
-  return input;
+  const { m, n } = input;
+  if (m === 0) {
+    return n + 1;
+  } else if (m > 0 && n === 0) {
+    return ackermann({ m: m - 1, n: 1 });
+  } else if (m > 0 && n > 0) {
+    return ackermann({ m: m - 1, n: ackermann({ m, n: n - 1 }) });
+  }
+  return undefined;
 }
 
 /* Q2 (*)
