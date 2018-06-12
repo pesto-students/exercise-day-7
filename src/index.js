@@ -53,7 +53,15 @@ function aperture(input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+// function concat(arg1, arg2) {
+function concat(arg1, arg2) {
+  if (typeof arg1 === 'string') {
+    return [...arg1, ...arg2].join('');
+  } else if (Array.isArray(arg1)) {
+    return [...arg1, ...arg2];
+  }
+  return arg1.concat(arg2);
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -65,7 +73,11 @@ function concat() {}
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference(list1, list2) {
+  // const combinedList = [...list1, ...list2];
+  const uniqueList = [...new Set(list1)];
+  return uniqueList.filter(item => list2.indexOf(item) === -1);
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
@@ -85,7 +97,16 @@ function difference() {}
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() {}
+function invertObj(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return {};
+  } else if (Array.isArray(obj)) {
+    // Handle Array case
+  } else if (typeof obj === 'object') {
+    // let objLength = Object.keys(obj).length;
+  }
+  return obj;
+}
 
 
 module.exports = {
