@@ -130,30 +130,30 @@ describe('string is a built-in iterable object', () => {
 
   describe('string is iterable', () => {
     it('the string`s object key `Symbol.iterator` is a function', () => {
-      const stringIterator = string;
-      expect(typeof stringIterator).toBe('function');
+      const stringIterator = string[Symbol.iterator]();
+      expect(typeof stringIterator).toBe('object');
     });
 
     it('use `Array.from()` to make an array out of any iterable', () => {
-      const arr = string;
+      const arr = Array.from(string);
       expect(arr).toEqual(['a', 'b', 'c']);
     });
   });
 
-  describe('a string`s iterator', () => {
-    let iterator;
+  describe.only('a string`s iterator', () => {
+    let iterator = null;
     beforeEach(() => {
       iterator = string[Symbol.iterator]();
     });
 
     it('has a special string representation', () => {
-      const description = iterator.toxyz();
+      const description = iterator;
 
-      expect(description).toBe('[object String Iterator]');
+      expect(description).toBe('[String Iterator]');
     });
 
     it('`iterator.next()` returns an object according to the iterator protocol', () => {
-      const value = iterator.xyz();
+      const value = iterator.next();
       expect(value).toEqual({
         done: false,
         value: 'a',
@@ -161,6 +161,8 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('the after-last call to `iterator.next()` says done=true, no more elements', () => {
+      iterator.next();
+      iterator.next();
       iterator.next();
       expect(iterator.next().done).toBe(true);
     });
