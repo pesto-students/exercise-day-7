@@ -15,8 +15,13 @@
  * output: Integer as defined above.
  */
 
+
 function ackermann(input) {
-  return input;
+  const { m, n } = input;
+  if (m === 0) { return n + 1; }
+  if (m > 0 && n === 0) { return ackermann({ m: m - 1, n: 1 }); }
+  if (m > 0 && n > 0) { return ackermann({ m: m - 1, n: ackermann({ m, n: n - 1 }) }); }
+  return 0;
 }
 
 /* Q2 (*)
@@ -28,10 +33,17 @@ function ackermann(input) {
  * aperture(2, [1, 2, 3, 4, 5]); //=> [[1, 2], [2, 3], [3, 4], [4, 5]]
  * aperture(3, [1, 2, 3, 4, 5]); //=> [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
+ *
  */
 
-function aperture(input) {
-  return input;
+function aperture(a, arr) {
+  let i = 0;
+  const arr2 = [];
+  while (i < (arr.length - (a + 1))) {
+    arr2.push(arr.slice(i, i + a));
+    i += 1;
+  }
+  return arr2;
 }
 
 /* Q3 (*)
@@ -51,7 +63,10 @@ function aperture(input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+function concat(input1, input2) {
+  const arr = input1.concat(input2);
+  return arr;
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -63,7 +78,11 @@ function concat() {}
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference(a, b) {
+  const result = a.filter(i => b.indexOf(i) < 0);
+  return Array.from(new Set(result));
+}
+
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
