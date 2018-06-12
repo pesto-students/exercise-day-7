@@ -38,8 +38,14 @@ function ackermann(input) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
+function aperture(n, ...arr) {
+  let i = 0;
+  const final = [];
+  while (i < arr.length) {
+    i += n;
+    final.push(...arr.slice(i, i + n));
+  }
+  return final;
 }
 
 /* Q3 (*)
@@ -59,7 +65,9 @@ function aperture(input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+function concat(a, b) {
+  return a.concat(b);
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -71,7 +79,9 @@ function concat() {}
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference() {
+
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
