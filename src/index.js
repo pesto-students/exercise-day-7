@@ -4,7 +4,25 @@ See the tests for this function to get the spec.
 */
 const simpleIterable = {
   [Symbol.iterator]() {
+    let count = 0;
     const iterator = {
+      next() {
+        count += 1;
+        switch (count) {
+          case 1:
+            return { value: 1, done: false };
+          case 2:
+            return { value: 2, done: false };
+          case 3:
+            return { value: 3, done: false };
+          case 4:
+            return { value: 4, done: false };
+          case 5:
+            return { value: 5, done: false };
+          default:
+            return { value: undefined, done: true };
+        }
+      },
     };
     return iterator;
   },
@@ -15,7 +33,11 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let count = 0;
+  while (count <= 4) {
+    count += 1;
+    yield count;
+  }
 }
 
 /* 3 (Q6 in tests)
@@ -41,7 +63,30 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  [Symbol.iterator]() {
+    let a = 1;
+    let b = 2;
+    let newValue = 0;
+    let count = 0;
+    const iterator = {
+      next() {
+        count += 1;
+        if (count === 1) {
+          return { value: a, done: true };
+        }
+        if (count === 2) {
+          return { value: b, done: true };
+        }
+        newValue = a + b;
+        a = b;
+        b = newValue;
+        return { value: newValue, done: true };
+      },
+    };
+    return iterator;
+  },
+};
 
 // 5 (*) (Q8 in tests)
 /*
@@ -53,7 +98,8 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty() {
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
