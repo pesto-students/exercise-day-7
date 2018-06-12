@@ -11,7 +11,7 @@ const {
 
 /* eslint-disable no-restricted-syntax, guard-for-in, no-unused-vars */
 // Q1 (*)
-describe.only('simpleIterable', () => {
+describe('simpleIterable', () => {
   test('should not be a generator function', () => {
     expect(simpleIterable.constructor.name).not.toBe('GeneratorFunction');
   });

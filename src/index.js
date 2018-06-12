@@ -10,19 +10,9 @@ function simpleIterable() {
         next() {
           if (step <= 4) {
             step += 1;
+            return { value: step, done: false };
           }
-          switch (step) {
-            case 1:
-              return { value: 1, done: false };
-            case 2:
-              return { value: 1, done: false };
-            case 3:
-              return { value: 1, done: false };
-            case 4:
-              return { value: 1, done: false };
-            default:
-              return { value: undefined, done: true };
-          }
+          return { value: undefined, done: true };
         },
       };
       return iterator;
@@ -36,7 +26,11 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
 }
 
 /* 3 (Q6 in tests)
