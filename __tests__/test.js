@@ -177,15 +177,18 @@ describe('string is a built-in iterable object', () => {
 describe('A simple iterable without items inside, implementing the right protocol', () => {
   function iteratorFunction() {
     let step = 0;
+    let returnedObj = {};
     const iterator = {
 
       next() {
         if (step < 1) {
           step += 1;
-          // return { done: true };
+          returnedObj = { done: true };
         } else {
-          // return {value: '', done: true};
+          returnedObj = { value: '', done: true };
         }
+
+        return returnedObj;
       },
     };
 
@@ -256,7 +259,7 @@ describe('A simple iterable without items inside, implementing the right protoco
   Q6: iterator - one example usage. Build an iterable and use it with
   some built-in ES6 constructs.
 */
-describe.only('Iterator usages', () => {
+describe('Iterator usages', () => {
   let usersIterable;
   beforeEach(() => {
     const consumableUsers = new ConsumableUsers();
