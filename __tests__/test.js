@@ -250,7 +250,16 @@ describe('A simple iterable without items inside, implementing the right protoco
   some built-in ES6 constructs.
 */
 describe('Iterator usages', () => {
-  let usersIterable;
+  let usersIterable = {
+    [Symbol.iterator]() {
+      const iterator = {
+        next() {
+          return {};
+        },
+      };
+      return iterator;
+    },
+  };
   beforeEach(() => {
     const consumableUsers = new ConsumableUsers();
 
