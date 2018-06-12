@@ -16,7 +16,15 @@
  */
 
 function ackermann(input) {
-  return input;
+  if (input.m === 0) {
+    return input.n + 1;
+  }
+  if (input.m > 0 && input.n === 0) {
+    return ackermann({ m: (input.m) - 1, n: 1 });
+  }
+  const obj = { m: input.m, n: (input.n) - 1 };
+  const x = ackermann(obj);
+  return ackermann({ m: (input.m) - 1, n: x });
 }
 
 /* Q2 (*)
@@ -30,9 +38,7 @@ function ackermann(input) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
-}
+function aperture() {}
 
 /* Q3 (*)
  * Returns the result of concatenating the given lists or strings.
