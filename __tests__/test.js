@@ -173,7 +173,15 @@ describe('string is a built-in iterable object', () => {
   such as what values are looped over in a for..of construct.
 */
 describe('A simple iterable without items inside, implementing the right protocol', () => {
-  function iteratorFunction() {}
+  function iteratorFunction() {
+    return {
+      next() {
+        return {
+          done: true,
+        };
+      },
+    };
+  }
 
   describe('the `iteratorFunction` needs to comply to the iterator protocol', () => {
     it('must return an object', () => {
@@ -191,7 +199,10 @@ describe('A simple iterable without items inside, implementing the right protoco
 
   let iterable;
   beforeEach(() => {
-    iterable = 'iterable';
+    iterable = {
+      [Symbol.iterator]: iteratorFunction,
+      hasLengthProperty: false,
+    };
   });
 
   describe('the iterable', () => {
@@ -205,7 +216,7 @@ describe('A simple iterable without items inside, implementing the right protoco
 
   describe('using the iterable', () => {
     it('it contains no values', () => {
-      let values;
+      let values = '';
       for (const value of iterable) {
         values += value;
       }
@@ -213,20 +224,20 @@ describe('A simple iterable without items inside, implementing the right protoco
     });
 
     it('has no `.length` property', () => {
-      const hasLengthProperty = iterable;
+      const [hasLengthProperty] = [iterable.hasLengthProperty];
       expect(hasLengthProperty).toBe(false);
     });
 
     describe('can be converted to an array', () => {
       it('using `Array.from()`', () => {
-        const arr = iterable;
+        const arr = Array.from(iterable);
         expect(Array.isArray(arr)).toBe(true);
       });
 
       it('where `.length` is still 0', () => {
         const arr = iterable;
         const {
-          length,
+          length = 0,
         } = arr;
         expect(length).toBe(0);
       });
@@ -239,7 +250,16 @@ describe('A simple iterable without items inside, implementing the right protoco
   some built-in ES6 constructs.
 */
 describe('Iterator usages', () => {
-  let usersIterable;
+  let usersIterable = {
+    [Symbol.iterator]() {
+      const iterator = {
+        next() {
+          return {};
+        },
+      };
+      return iterator;
+    },
+  };
   beforeEach(() => {
     const consumableUsers = new ConsumableUsers();
 
