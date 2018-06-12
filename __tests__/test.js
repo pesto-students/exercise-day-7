@@ -50,7 +50,7 @@ describe('simpleIterable', () => {
 });
 
 // Q2 (*)
-describe('generatorIterable', () => {
+describe.only('generatorIterable', () => {
   test('should be a generator function', () => {
     expect(generatorIterable.constructor.name).toBe('GeneratorFunction');
   });

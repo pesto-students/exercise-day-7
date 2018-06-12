@@ -2,14 +2,46 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  const iterable = {
+    [Symbol.iterator]() {
+      let step = 0;
+      const iterator = {
+
+        next() {
+          let returnedObj = {};
+          if (step < 5) {
+            step += 1;
+            returnedObj = { value: step, done: false };
+          } else {
+            returnedObj = { value: undefined, done: true };
+          }
+          return returnedObj;
+        },
+      };
+      return iterator;
+    },
+  };
+
+  return iterable;
+}
 
 /* 2 (*)
 Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let index = 0;
+  let returnedObj = {};
+  while (true) {
+    if (index < 5) {
+      returnedObj = { value: index, done: false };
+      index += 1;
+    } else {
+      returnedObj = { value: undefined, done: true };
+    }
+    yield returnedObj;
+  }
 }
 
 /* 3 (Q6 in tests)
