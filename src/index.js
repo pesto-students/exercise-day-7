@@ -2,6 +2,7 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
+
 function simpleIterable() {
   const iterable = {
     [Symbol.iterator]() {
@@ -56,7 +57,22 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  /* [Symbol.iterator]() {
+    // let one = 0, two=1, i=1;
+
+   const iterator = {
+    next() {
+        if (i <= 10) {
+          return { value: one + two, done: false };
+          one = two;
+          two = one + two;
+        }
+        return { value: undefined, done: true };
+      }
+    }
+  } */
+};
 
 // 5 (*) (Q8 in tests)
 /*
