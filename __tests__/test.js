@@ -50,7 +50,7 @@ describe('simpleIterable', () => {
 });
 
 // Q2 (*)
-describe.only('generatorIterable', () => {
+describe('generatorIterable', () => {
   test('should be a generator function', () => {
     expect(generatorIterable.constructor.name).toBe('GeneratorFunction');
   });
@@ -130,12 +130,12 @@ describe('string is a built-in iterable object', () => {
 
   describe('string is iterable', () => {
     it('the string`s object key `Symbol.iterator` is a function', () => {
-      const stringIterator = string;
+      const stringIterator = string[Symbol.iterator];
       expect(typeof stringIterator).toBe('function');
     });
 
     it('use `Array.from()` to make an array out of any iterable', () => {
-      const arr = string;
+      const arr = Array.from(string);
       expect(arr).toEqual(['a', 'b', 'c']);
     });
   });
@@ -147,13 +147,13 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('has a special string representation', () => {
-      const description = iterator.toxyz();
+      const description = `${iterator}`;
 
       expect(description).toBe('[object String Iterator]');
     });
 
     it('`iterator.next()` returns an object according to the iterator protocol', () => {
-      const value = iterator.xyz();
+      const value = iterator.next();
       expect(value).toEqual({
         done: false,
         value: 'a',
@@ -161,6 +161,8 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('the after-last call to `iterator.next()` says done=true, no more elements', () => {
+      iterator.next();
+      iterator.next();
       iterator.next();
       expect(iterator.next().done).toBe(true);
     });
@@ -172,7 +174,7 @@ describe('string is a built-in iterable object', () => {
   implemented allows objects to customize their iteration behavior,
   such as what values are looped over in a for..of construct.
 */
-describe('A simple iterable without items inside, implementing the right protocol', () => {
+describe.only('A simple iterable without items inside, implementing the right protocol', () => {
   function iteratorFunction() {}
 
   describe('the `iteratorFunction` needs to comply to the iterator protocol', () => {

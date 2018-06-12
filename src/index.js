@@ -31,17 +31,11 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  let index = 0;
-  let returnedObj = {};
-  while (true) {
-    if (index < 5) {
-      returnedObj = { value: index, done: false };
-      index += 1;
-    } else {
-      returnedObj = { value: undefined, done: true };
-    }
-    yield returnedObj;
-  }
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
 }
 
 /* 3 (Q6 in tests)
@@ -57,7 +51,17 @@ class ConsumableUsers {
   }
   get nextUser() {
     // Implement this according to test spec (for creating iterable)
-    return [];
+    return {
+      [Symbol.iterator]() {
+        const iterator = {
+          next() {
+            return { value: 1, done: false };
+          },
+        };
+
+        return iterator;
+      },
+    };
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
