@@ -78,9 +78,11 @@ function concat(input1, input2) {
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {
-
+function difference(a, b) {
+  const result = a.filter(i => b.indexOf(i) < 0);
+  return Array.from(new Set(result));
 }
+
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
