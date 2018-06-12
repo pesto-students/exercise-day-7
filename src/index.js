@@ -3,10 +3,20 @@ Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
 function simpleIterable() {
-  const iter = [Symbol.iterator](){
-    return true;
-  }.
-
+  let i = 1;
+  const iterable = {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next() {
+      if (i <= 5) {
+        i += 1;
+        return { value: i - 1, done: false };
+      }
+      return { value: undefined, done: true };
+    },
+  };
+  return iterable;
 }
 
 /* 2 (*)
@@ -40,7 +50,9 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+
+};
 
 // 5 (*) (Q8 in tests)
 /*
