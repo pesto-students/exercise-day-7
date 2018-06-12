@@ -2,7 +2,12 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  const iter = [Symbol.iterator](){
+    return true;
+  }.
+
+}
 
 /* 2 (*)
 Create an iterable using generator function.
