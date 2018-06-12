@@ -78,7 +78,7 @@ describe('generatorIterable', () => {
 });
 
 // Q3 (*)
-describe('Array is a built-in iterable object', () => {
+describe.only('Array is a built-in iterable object', () => {
   const arr = ['a', 'B', 'see'];
 
   describe('the iterator', () => {
@@ -86,13 +86,13 @@ describe('Array is a built-in iterable object', () => {
       const iterator = arr[Symbol.iterator];
       const theType = typeof iterator;
 
-      expect(theType).toBe('iterator'); // 1) typeof iterator === 'iterator'?
+      expect(theType).toBe('function'); // 1) typeof iterator === 'iterator'?
     });
 
     it('can be looped with `for-of`, which expects an iterable', () => {
       let count = 0;
       for (const value of arr) { // 2) Would for-of work on a normal Array?
-        count -= 1;
+        count += 1;
       }
 
       expect(count).toBe(arr.length);
@@ -102,7 +102,7 @@ describe('Array is a built-in iterable object', () => {
   describe('the iterator protocol', () => {
     it('calling `next()` on an iterator returns an object according to the iterator protocol', () => {
       const iterator = arr[Symbol.iterator]();
-      const firstItem = iterator.xyz(); // 3) What is the method to iterate to the next iteration?
+      const firstItem = iterator.next(); // 3) What is the method to iterate to the next iteration?
 
       expect(firstItem).toEqual({
         done: false,
@@ -125,17 +125,17 @@ describe('Array is a built-in iterable object', () => {
 });
 
 // Q4: iterator/iterable - string. (*)
-describe('string is a built-in iterable object', () => {
+describe.only('string is a built-in iterable object', () => {
   const string = 'abc';
 
   describe('string is iterable', () => {
     it('the string`s object key `Symbol.iterator` is a function', () => {
-      const stringIterator = string;
+      const stringIterator = string[Symbol.iterator];
       expect(typeof stringIterator).toBe('function');
     });
 
     it('use `Array.from()` to make an array out of any iterable', () => {
-      const arr = string;
+      const arr = Array.from(string);
       expect(arr).toEqual(['a', 'b', 'c']);
     });
   });
@@ -147,7 +147,7 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('has a special string representation', () => {
-      const description = iterator.toxyz();
+      const description = iterator.next();
 
       expect(description).toBe('[object String Iterator]');
     });

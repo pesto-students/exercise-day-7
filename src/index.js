@@ -2,14 +2,36 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+
+function simpleIterable() {
+  const iterable = {
+    [Symbol.iterator]() {
+      let step = 0;
+      const iterator = {
+        next() {
+          if (step <= 4) {
+            step += 1;
+            return { value: step, done: false };
+          }
+          return { value: undefined, done: true };
+        },
+      };
+      return iterator;
+    },
+  };
+  return iterable;
+}
 
 /* 2 (*)
 Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
 }
 
 /* 3 (Q6 in tests)
@@ -35,7 +57,22 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  /* [Symbol.iterator]() {
+    // let one = 0, two=1, i=1;
+
+   const iterator = {
+    next() {
+        if (i <= 10) {
+          return { value: one + two, done: false };
+          one = two;
+          two = one + two;
+        }
+        return { value: undefined, done: true };
+      }
+    }
+  } */
+};
 
 // 5 (*) (Q8 in tests)
 /*
