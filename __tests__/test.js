@@ -125,7 +125,7 @@ describe.only('Array is a built-in iterable object', () => {
 });
 
 // Q4: iterator/iterable - string. (*)
-describe('string is a built-in iterable object', () => {
+describe.only('string is a built-in iterable object', () => {
   const string = 'abc';
 
   describe('string is iterable', () => {
@@ -147,7 +147,7 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('has a special string representation', () => {
-      const description = iterator.toxyz();
+      const description = iterator.next();
 
       expect(description).toBe('[object String Iterator]');
     });
