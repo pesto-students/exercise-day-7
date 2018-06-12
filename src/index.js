@@ -78,7 +78,9 @@ function concat(input1, input2) {
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference() {
+
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
