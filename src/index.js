@@ -101,7 +101,26 @@ function difference() {
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() {}
+function invertObj(element) {
+  let returnedElement;
+  if (typeof element === 'object') {
+    const keys = Object.keys(element);
+
+    returnedElement = keys.reduce((final, item) => {
+      const temp = {};
+      temp[element[item]] = item;
+      return { ...final, ...temp };
+    }, {});
+  } else {
+    returnedElement = element.reduce((final, item) => {
+      const temp = {};
+      temp[element[item]] = item;
+      return { ...final, ...temp };
+    });
+  }
+
+  return returnedElement;
+}
 
 
 module.exports = {
