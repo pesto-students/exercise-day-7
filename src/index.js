@@ -7,22 +7,19 @@ function simpleIterable() {
     [Symbol.iterator]() {
       let step = 0;
       const iterator = {
-
         next() {
-          let returnedObj = {};
-          if (step < 5) {
-            step += 1;
-            returnedObj = { value: step, done: false };
-          } else {
-            returnedObj = { value: undefined, done: true };
+          step += 1;
+          while (step <= 5) {
+            return { value: step, done: false };
           }
-          return returnedObj;
+
+          return { value: undefined, done: true };
         },
       };
+
       return iterator;
     },
   };
-
   return iterable;
 }
 
@@ -66,7 +63,20 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  [Symbol.iterator]() {
+    let a = 1;
+    let b = 1;
+    return {
+      next() {
+        const current = b;
+        b = a;
+        a += current;
+        return { value: current, done: false };
+      },
+    };
+  },
+};
 
 // 5 (*) (Q8 in tests)
 /*
@@ -78,7 +88,15 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(container) {
+  const iterator = container[Symbol.iterator]();
+  const { done } = iterator.next();
+
+  if (done) {
+    return true;
+  }
+  return false;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -87,7 +105,9 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(container) {
+  return typeof container[Symbol.iterator] === 'function';
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
@@ -109,7 +129,31 @@ function isIterable() {}
   cycled.previous();
   //=> 3
 */
-class Cycled extends Array {}
+class Cycled extends Array {
+  constructor(arr) {
+    super();
+    this.arr = arr;
+    this.currentIndex = 0;
+  }
+  step(stepCount) {
+    this.currentIndex = (this.currentIndex + stepCount) % this.arr.length;
+
+    if (this.currentIndex < 0) {
+      this.currentIndex = this.arr.length + this.currentIndex;
+    }
+    return this.arr[this.currentIndex];
+  }
+
+  current() {
+    return this.step(0);
+  }
+  next() {
+    return this.step(1);
+  }
+  previous() {
+    return this.step(-1);
+  }
+}
 
 // 8 (*) (Q11 in tests)
 // range(1, 5)

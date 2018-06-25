@@ -323,7 +323,7 @@ describe('Iterator usages', () => {
 
       it('should return `done:true`, which means there are no more items', () => {
         iterator.next();
-        iterator.xyz();
+        iterator.next();
         const beyondLast = iterator.next();
         expect(beyondLast).toEqual({
           value: undefined,
@@ -372,6 +372,7 @@ describe('fibonacci', () => {
 
   test('should return fibonacci series', () => {
     const iterator = fibonacci[Symbol.iterator]();
+    expect(iterator.next().value).toBe(1);
     expect(iterator.next().value).toBe(1);
     expect(iterator.next().value).toBe(2);
     expect(iterator.next().value).toBe(3);
