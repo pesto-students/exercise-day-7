@@ -80,7 +80,7 @@ function concat(a, b) {
  */
 
 function difference() {
-
+  // return arr1.filter(item => !arr2.includes(item));
 }
 
 /* Q5 (*)
@@ -101,9 +101,11 @@ function difference() {
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj(element) {
+function invertObj(element = {}) {
   let returnedElement;
-  if (typeof element === 'object') {
+  if (element === null || typeof element === 'string') {
+    returnedElement = {};
+  } else {
     const keys = Object.keys(element);
 
     returnedElement = keys.reduce((final, item) => {
@@ -111,14 +113,7 @@ function invertObj(element) {
       temp[element[item]] = item;
       return { ...final, ...temp };
     }, {});
-  } else {
-    returnedElement = element.reduce((final, item) => {
-      const temp = {};
-      temp[element[item]] = item;
-      return { ...final, ...temp };
-    });
   }
-
   return returnedElement;
 }
 
