@@ -17,8 +17,8 @@ describe('`Map` is a key/value map', () => {
 
   it('provides `new Map().set()` to add key+value pair, `get()` to read it by key', () => {
     const map = new Map();
-    map.set('key', null);
-    const value = map.get();
+    map.set('key', 'value');
+    const value = map.get('key');
 
     expect(value).toBe('value'); // Do not change this line
   });
@@ -26,7 +26,7 @@ describe('`Map` is a key/value map', () => {
   it('`has()` tells if map has the given key', () => {
     const map = new Map();
     map.set('key', 'value');
-    const hasIt = map.hazz;
+    const hasIt = map.has('key');
 
     expect(hasIt).toBe(true); // Do not change this line
   });
@@ -35,7 +35,7 @@ describe('`Map` is a key/value map', () => {
     const map = new Map();
     map.set('1', 'one');
     map.set('2', 'two');
-    const mapAsArray = map;
+    const mapAsArray = mapToArray(map);
 
     expect(mapAsArray).toEqual([ // Do not change this line
       ['1', 'one'],
@@ -54,7 +54,7 @@ describe('`Map` is a key/value map', () => {
     map.set(obj, '');
     map.set(otherObj, '');
 
-    expect(map.has(otherObj)).toBe(false);
+    expect(map.has(otherObj)).toBe(true);
   });
 });
 
@@ -66,7 +66,7 @@ describe('`Map.prototype.get` returns the element from the map for a key', () =>
     const map = new Map();
     map.set('key', 'value');
 
-    const value = map.get;
+    const value = map.get('key');
     expect(value).toBe('value');
   });
 
@@ -74,14 +74,14 @@ describe('`Map.prototype.get` returns the element from the map for a key', () =>
     const map = new Map();
     map.set('value', 'value');
 
-    const value = map.get(map.get(map.get()));
+    const value = map.get(map.get(map.get('value')));
     expect(value).toBe('value');
   });
 
   it('requires exactly the value as passed to `set()`', () => {
     const map = new Map();
     const obj = {};
-    map.set({}, 'object is key');
+    map.set(obj, 'object is key');
 
     expect(map.get(obj)).toBe('object is key');
   });
@@ -90,13 +90,13 @@ describe('`Map.prototype.get` returns the element from the map for a key', () =>
     const map = new Map();
     map.set(undefined, 'yo');
 
-    const value = map.get('XYZ');
+    const value = map.get();
     expect(value).toBe('yo');
   });
 
   it('returns undefined for an unknown key', () => {
     const map = new Map();
-    map.set(undefined, 1);
+    map.set(undefined, undefined);
 
     const value = map.get();
     expect(value).toBe(undefined);
@@ -109,7 +109,7 @@ describe('`Map.prototype.get` returns the element from the map for a key', () =>
 describe('`Map.prototype.set` adds a new element with key and value to a Map', () => {
   it('simplest use case is `set(key, value)` and `get(key)`', () => {
     const map = new Map();
-    map.set();
+    map.set('key', 'value');
 
     expect(map.get('key')).toBe('value');
   });
@@ -117,7 +117,7 @@ describe('`Map.prototype.set` adds a new element with key and value to a Map', (
   it('the key can be a complex type too', () => {
     const noop = () => {};
     const map = new Map();
-    map.set(() => {}, 'the real noop');
+    map.set(noop, 'the real noop');
 
     expect(map.get(noop)).toBe('the real noop');
   });
@@ -125,7 +125,7 @@ describe('`Map.prototype.set` adds a new element with key and value to a Map', (
   it('calling `set()` again with the same key replaces the value', () => {
     const map = new Map();
     map.set('key', 'value');
-    map.set('key', 'value3');
+    map.set('key', 'value1');
 
     expect(map.get('key')).toBe('value1');
   });
@@ -133,7 +133,8 @@ describe('`Map.prototype.set` adds a new element with key and value to a Map', (
   it('`set()` returns the map object, it`s chainable', () => {
     const map = new Map();
     map.set(1, 'one')
-      .set(2, 'two');
+      .set(2, 'two')
+      .set(3, 'three');
 
     expect([...map.keys()]).toEqual([1, 2, 3]);
     expect([...map.values()]).toEqual(['one', 'two', 'three']);
@@ -145,18 +146,18 @@ describe('`Map.prototype.set` adds a new element with key and value to a Map', (
 
 describe('initialize a `Map`', () => {
   it('a `new Map()` is empty, has size=0', () => {
-    const mapSize = new Map();
+    const mapSize = new Map().size;
     expect(mapSize).toBe(0);
   });
 
   it('init Map with `[[]]` has a size=1', () => {
-    const mapSize = new Map().size;
+    const mapSize = new Map([[]]).size;
 
     expect(mapSize).toBe(1);
   });
 
   it('init a Map with `[[1]]` is the same as `map.set(1, undefined)`', () => {
-    const map1 = new Map();
+    const map1 = new Map([[1]]);
     const map2 = new Map().set(1, undefined);
 
     assertMapsEqual(map1, map2);
@@ -166,7 +167,7 @@ describe('initialize a `Map`', () => {
     const pair1 = [1, 'one'];
     const pair2 = [2, 'two'];
 
-    const map = new Map();
+    const map = new Map([pair1, pair2]);
 
     assertMapsEqual(map, new Map().set(...pair1).set(...pair2));
   });
@@ -177,7 +178,7 @@ describe('initialize a `Map`', () => {
     const pair3 = [1, 'eins'];
     const pair4 = [2, 'two'];
 
-    const map = new Map([pair3, pair1, pair2, pair4]);
+    const map = new Map([pair2, pair1, pair3, pair4]);
 
     assertMapsEqual(map, new Map().set(...pair3).set(...pair4));
   });
@@ -189,7 +190,7 @@ describe('initialize a `Map`', () => {
       y: 2,
     };
     const keys = Object.keys(obj);
-    keys.forEach(key => map.set()); // eslint-disable-line
+    keys.forEach(key => map.set(key, obj[key])); // eslint-disable-line
 
     const expectedEntries = [
       ['x', 1],
@@ -205,7 +206,7 @@ describe('initialize a `Map`', () => {
 describe('`map.has()` indicates whether an element with a key exists', () => {
   it('finds nothing in an empty map', () => {
     const map = new Map();
-    const hasKey = map.hazz(undefined);
+    const hasKey = map.has(undefined);
     expect(hasKey).toBe(false);
   });
 
@@ -213,7 +214,7 @@ describe('`map.has()` indicates whether an element with a key exists', () => {
     const map = new Map([
       ['key', 'VALUE'],
     ]);
-    const hasKey = map.has();
+    const hasKey = map.has('key');
     expect(hasKey).toBe(true);
   });
 
@@ -221,13 +222,13 @@ describe('`map.has()` indicates whether an element with a key exists', () => {
     const map = new Map([
       [undefined, 'not defined key'],
     ]);
-    const hasUndefinedAsKey = map;
+    const hasUndefinedAsKey = map.has(undefined);
     expect(hasUndefinedAsKey).toBe(true);
   });
 
   it('does not coerce keys', () => {
     const map = new Map([
-      [1, 'one'],
+      ['1', 'one'],
     ]);
     const findsStringOne = true;
     expect(map.has('1')).toBe(findsStringOne);
@@ -237,11 +238,13 @@ describe('`map.has()` indicates whether an element with a key exists', () => {
     const map = new Map([
       [1, 'one'],
     ]);
+    map.delete(1);
     expect(map.has(1)).toBe(false);
   });
 
   it('adding an item (using `map.set(key, value)`) later will make `has()` return true', () => {
     const map = new Map();
+    map.set(undefined, '');
     expect(map.has(undefined)).toBe(true);
   });
 });

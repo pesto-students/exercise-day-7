@@ -16,7 +16,15 @@
  */
 
 function ackermann(input) {
-  return input;
+  const { m, n } = input;
+  if (m === 0) {
+    return n + 1;
+  } else if (m > 0 && n === 0) {
+    return ackermann({ m: m - 1, n: 1 });
+  } else if (m > 0 && n > 0) {
+    return ackermann({ m: m - 1, n: ackermann({ m, n: n - 1 }) });
+  }
+  return undefined;
 }
 
 /* Q2 (*)
@@ -30,8 +38,14 @@ function ackermann(input) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
+function aperture(n, ...arr) {
+  let i = 0;
+  const final = [];
+  while (i < arr.length) {
+    i += n;
+    final.push(...arr.slice(i, i + n));
+  }
+  return final;
 }
 
 /* Q3 (*)
@@ -51,7 +65,9 @@ function aperture(input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+function concat(a, b) {
+  return a.concat(b);
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -63,7 +79,9 @@ function concat() {}
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference() {
+  // return arr1.filter(item => !arr2.includes(item));
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
@@ -83,7 +101,21 @@ function difference() {}
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() {}
+function invertObj(element = {}) {
+  let returnedElement;
+  if (element === null || typeof element === 'string') {
+    returnedElement = {};
+  } else {
+    const keys = Object.keys(element);
+
+    returnedElement = keys.reduce((final, item) => {
+      const temp = {};
+      temp[element[item]] = item;
+      return { ...final, ...temp };
+    }, {});
+  }
+  return returnedElement;
+}
 
 
 module.exports = {
