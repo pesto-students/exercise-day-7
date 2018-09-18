@@ -51,12 +51,16 @@ class ConsumableUsers {
     this._done = false;
   }
   get nextUser() {
-    // Implement this according to test spec (for creating iterable)
-    return [];
+    if (this.users.length > 0) {
+      const user = this.users[0];
+      this.users = this.users.splice(0, 1);
+      return `user: ${user}`;
+    }
+    return undefined;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
-    return false;
+    return this.users.length === 0;
   }
 }
 /* eslint-enable no-underscore-dangle, class-methods-use-this */

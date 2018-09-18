@@ -147,9 +147,9 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('has a special string representation', () => {
-      const description = iterator.next;
+      const description = iterator.toString();
 
-      expect(description.toString()).toBe('[Function next]');
+      expect(description.toString()).toBe('[object String Iterator]');
     });
 
     it('`iterator.next()` returns an object according to the iterator protocol', () => {
@@ -262,7 +262,9 @@ describe('Iterator usages', () => {
       };
     }
 
-    usersIterable = {};
+    usersIterable = {
+      [Symbol.iterator]: iteratorFunction,
+    };
   });
 
   describe('create an iterator/iterable', () => {
@@ -286,7 +288,7 @@ describe('Iterator usages', () => {
     describe('using the iterator', () => {
       let iterator;
       beforeEach(() => {
-        iterator = usersIterable[Symbol.iterator];
+        iterator = usersIterable[Symbol.iterator]();
       });
 
       it('should return `Alice` as first user', () => {
@@ -307,7 +309,7 @@ describe('Iterator usages', () => {
 
       it('should return `done:true`, which means there are no more items', () => {
         iterator.next();
-        iterator.xyz();
+        iterator.next();
         const beyondLast = iterator.next();
         expect(beyondLast).toEqual({
           value: undefined,
