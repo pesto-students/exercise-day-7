@@ -2,14 +2,32 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  return {
+    [Symbol.iterator]() {
+      return {
+        state: 0,
+        next: function next() {
+          if (this.state >= 5) return { value: undefined, done: true };
+
+          this.state += 1;
+          return { value: this.state, done: false };
+        },
+      };
+    },
+  };
+}
 
 /* 2 (*)
 Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let i = 1;
+  while (i <= 5) {
+    yield i;
+    i += 1;
+  }
 }
 
 /* 3 (Q6 in tests)
@@ -25,17 +43,33 @@ class ConsumableUsers {
   }
   get nextUser() {
     // Implement this according to test spec (for creating iterable)
-    return [];
+    if (this.users.length === 0) return undefined;
+    return `user: ${this.users.shift()}`;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
+    if (this._done) return true;
+    if (this.users.length === 0) this._done = true;
     return false;
   }
 }
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  [Symbol.iterator]() {
+    let prev = 0;
+    let cur = 1;
+    return {
+      next() {
+        const next = prev + cur;
+        prev = cur;
+        cur = next;
+        return { value: next, done: false };
+      },
+    };
+  },
+};
 
 // 5 (*) (Q8 in tests)
 /*
@@ -47,7 +81,11 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(iterable) {
+  const iterator = iterable[Symbol.iterator]();
+  const firstItem = iterator.next();
+  return firstItem.done === true;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -56,7 +94,9 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(obj) {
+  return typeof obj[Symbol.iterator] === 'function';
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
@@ -78,12 +118,80 @@ function isIterable() {}
   cycled.previous();
   //=> 3
 */
-class Cycled extends Array {}
+class Cycled extends Array {
+  constructor(elems) {
+    if (elems.length === 0) throw new Error('Must have a non-empty iterable');
+
+    super();
+    this.elems = Array.from(elems);
+    this.curIdx = 0;
+  }
+  current() {
+    return this.elems[this.curIdx];
+  }
+  next() {
+    this.curIdx = (this.curIdx + 1) % this.elems.length;
+    return this.current();
+  }
+  previous() {
+    if (this.curIdx === 0) this.curIdx = this.elems.length - 1;
+    else this.curIdx -= 1;
+    return this.current();
+  }
+  step(n) {
+    let method;
+    if (n < 0) {
+      method = 'previous';
+    } else {
+      method = 'next';
+    }
+
+    for (let i = 0; i < Math.abs(n); i += 1) {
+      this[method]();
+    }
+
+    return this.current();
+  }
+
+  get index() {
+    return this.curIdx;
+  }
+  set index(val) {
+    this.curIdx = (val % this.elems.length) + (val < 0 ? this.elems.length : 0);
+  }
+
+  reversed() {
+    this.elems.reverse();
+    this.curIdx = this.elems.length - this.curIdx - 1;
+    return this[Symbol.iterator]();
+  }
+
+  indexOf(elem) {
+    return this.elems.indexOf(elem);
+  }
+
+  [Symbol.iterator]() {
+    const that = this;
+    return {
+      next() {
+        that.curIdx = (that.curIdx + 1) % that.elems.length;
+        return { value: that.current(), done: false };
+      },
+    };
+  }
+}
 
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range() {}
+function range(a, b) {
+  if (typeof a !== 'number' || typeof b !== 'number') {
+    throw new TypeError('undefined is not a number');
+  }
+  const ret = [];
+  for (let i = a; i <= b; i += 1) ret.push(i);
+  return ret;
+}
 
 module.exports = {
   simpleIterable,
