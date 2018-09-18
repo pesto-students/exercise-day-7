@@ -118,7 +118,68 @@ function isIterable(obj) {
   cycled.previous();
   //=> 3
 */
-class Cycled extends Array { }
+class Cycled extends Array {
+  constructor(elems) {
+    if (elems.length === 0) throw new Error('Must have a non-empty iterable');
+
+    super();
+    this.elems = Array.from(elems);
+    this.curIdx = 0;
+  }
+  current() {
+    return this.elems[this.curIdx];
+  }
+  next() {
+    this.curIdx = (this.curIdx + 1) % this.elems.length;
+    return this.current();
+  }
+  previous() {
+    if (this.curIdx === 0) this.curIdx = this.elems.length - 1;
+    else this.curIdx -= 1;
+    return this.current();
+  }
+  step(n) {
+    let method;
+    if (n < 0) {
+      method = 'previous';
+    } else {
+      method = 'next';
+    }
+
+    for (let i = 0; i < Math.abs(n); i += 1) {
+      this[method]();
+    }
+
+    return this.current();
+  }
+
+  get index() {
+    return this.curIdx;
+  }
+  set index(val) {
+    this.curIdx = (val % this.elems.length) + (val < 0 ? this.elems.length : 0);
+  }
+
+  reversed() {
+    this.elems.reverse();
+    this.curIdx = this.elems.length - this.curIdx - 1;
+    return this[Symbol.iterator]();
+  }
+
+  indexOf(elem) {
+    return this.elems.indexOf(elem);
+  }
+
+  [Symbol.iterator]() {
+    const that = this;
+    return {
+      next() {
+        that.curIdx = (that.curIdx + 1) % that.elems.length;
+        return { value: that.current(), done: false };
+      },
+    };
+  }
+}
 
 // 8 (*) (Q11 in tests)
 // range(1, 5)
