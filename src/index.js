@@ -81,7 +81,11 @@ const fibonacci = {
 
   Do not use Array.from()
 */
-function isIterableEmpty() { }
+function isIterableEmpty(iterable) {
+  const iterator = iterable[Symbol.iterator]();
+  const firstItem = iterator.next();
+  return firstItem.done === true;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
