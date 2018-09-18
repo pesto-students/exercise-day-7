@@ -32,8 +32,14 @@ function ackermann({ m, n }) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
+function aperture(n, arr) {
+  const ret = [];
+  if (arr.length < n) return ret;
+
+  for (let i = 0; i <= arr.length - n; i += 1) {
+    ret.push(arr.slice(i, i + n));
+  }
+  return ret;
 }
 
 /* Q3 (*)
