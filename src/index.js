@@ -97,7 +97,29 @@ function difference() {}
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() {}
+function invertArrayObj(arr) {
+  const invObj = {};
+  arr.forEach((val, index) => {
+    invObj[val] = index.toString();
+  });
+  return invObj;
+}
+
+function invertObj(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return {};
+  }
+
+  if (Array.isArray(obj)) {
+    return invertArrayObj(obj);
+  }
+
+  const invObj = {};
+  Object.keys(obj).forEach((key) => {
+    invObj[obj[key]] = key;
+  });
+  return invObj;
+}
 
 
 module.exports = {
