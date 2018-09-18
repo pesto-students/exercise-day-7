@@ -55,33 +55,34 @@ describe('`add()` appends a new element to the end of a Set object.', () => {
   });
 
   it('adds every value, of any type, only once', () => {
-    const fn = () => {};
+    const fn = () => { };
 
     set.add(1);
     set.add(1);
     set.add(fn);
-    set.add({
-      fn,
-    });
+    set.add(fn);
 
     expect(set.size).toBe(2);
   });
 
   it('is chainable', () => {
     // set.add.add;
+    set.add(1).add(2);
 
     expect(set.has(2)).toBe(true);
   });
 
   it('call without params adds undefined', () => {
     // set.add
+    set.add();
 
     expect(set.has(undefined)).toBe(true);
   });
 
   it('0, -0 and +0 are equal', () => {
-    set.add();
-    set.add();
+    set.add(+0);
+    set.add(0);
+    set.add(-0);
 
     expect(set.has(+0)).toBe(true);
   });
