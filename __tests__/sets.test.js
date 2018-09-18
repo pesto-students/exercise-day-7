@@ -103,10 +103,11 @@ describe('`set.delete()` deletes an element from a set', () => {
       set.add('one').add('two').add('three');
     });
     it('`delete()` returns `true` when the element was found', () => {
-      const returns = set.remove;
+      const returns = set.delete('one');
       expect(returns).toBe(true);
     });
     it('and the size decreases', () => {
+      set.delete('one');
       expect(set.size).toBe(2);
     });
   });
@@ -114,7 +115,7 @@ describe('`set.delete()` deletes an element from a set', () => {
   describe('if nothing was deleted (no element with the given value was found)', () => {
     it('returns `false`', () => {
       set.add('one');
-      const returns = set.delete('one');
+      const returns = set.delete('two');
 
       expect(returns).toBe(false);
     });
@@ -124,11 +125,12 @@ describe('`set.delete()` deletes an element from a set', () => {
     it('deleting it, when it is not in the set, returns `false` too', () => {
       set.add(1);
       // delete undefined from a set
-      const elementToDelete = 1;
+      const elementToDelete = undefined;
       expect(set.delete(elementToDelete)).toBe(false);
     });
 
     it('`delete()` removes it, when its in the set', () => {
+      set.add();
       expect(set.delete()).toBe(true);
     });
   });
@@ -136,7 +138,7 @@ describe('`set.delete()` deletes an element from a set', () => {
   describe('the value does NOT get casted', () => {
     it('number 1 is different to string "1"', () => {
       set.add(1);
-      set.add('1');
+      set.add(1);
       expect(set.delete('1')).toBe(false);
     });
   });
