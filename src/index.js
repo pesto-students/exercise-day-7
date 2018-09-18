@@ -16,7 +16,13 @@
  */
 
 function ackermann(input) {
-  return input;
+  if (input.m === 0) {
+    return input.n + 1;
+  } else if (input.m > 0 && input.n === 0) {
+    return ackermann({ m: input.m - 1, n: 1 });
+  }
+
+  return ackermann({ m: input.m - 1, n: ackermann({ m: input.m, n: input.n - 1 }) });
 }
 
 /* Q2 (*)
@@ -30,8 +36,16 @@ function ackermann(input) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
+function aperture(n, input) {
+  if (n > input.length) {
+    return [];
+  }
+
+  const slicedArray = [input.slice(0, n)];
+  const [, ...restArr] = input;
+  const arr = aperture(n, restArr);
+  slicedArray.push(...arr);
+  return slicedArray;
 }
 
 /* Q3 (*)
