@@ -2,7 +2,21 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  return {
+    [Symbol.iterator]() {
+      return {
+        state: 0,
+        next: function next() {
+          if (this.state >= 5) return { value: undefined, done: true };
+
+          this.state += 1;
+          return { value: this.state, done: false };
+        },
+      };
+    },
+  };
+}
 
 /* 2 (*)
 Create an iterable using generator function.
@@ -47,7 +61,7 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty() { }
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -56,7 +70,7 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable() { }
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
@@ -78,12 +92,12 @@ function isIterable() {}
   cycled.previous();
   //=> 3
 */
-class Cycled extends Array {}
+class Cycled extends Array { }
 
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range() {}
+function range() { }
 
 module.exports = {
   simpleIterable,
