@@ -59,7 +59,9 @@ function aperture(n, arr) {
  *    concat([], []); //=> []
  */
 
-function concat() { }
+function concat(a, b) {
+  return a.concat(b);
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
