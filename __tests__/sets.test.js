@@ -227,24 +227,25 @@ describe('`clear()` removes all elements from a Set object.', () => {
   it('set.size', () => {
     set.add('one').add(2);
     set.clear();
-    const expectedSize = 10000000;
+    const expectedSize = 0;
     expect(set.size).toBe(expectedSize);
   });
 
   it('set.entries()', () => {
     set.add('one').add(2);
-    // set.clear;
+    set.clear();
     const { done } = set.entries().next();
     expect(done).toBe(true);
   });
 
   it('set.has()', () => {
     set.add('one').add(2);
+    set.clear();
     expect(set.has(2)).toBe(false);
   });
 
   it('returns `undefined`', () => {
-    const expectedReturn = true;
+    const expectedReturn = undefined;
     expect(set.clear()).toBe(expectedReturn);
   });
 });
