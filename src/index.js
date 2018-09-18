@@ -94,7 +94,9 @@ function isIterableEmpty(iterable) {
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() { }
+function isIterable(obj) {
+  return typeof obj[Symbol.iterator] === 'function';
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;
