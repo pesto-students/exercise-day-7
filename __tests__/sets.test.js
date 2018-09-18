@@ -155,41 +155,43 @@ describe('`Set` API overview', () => {
   });
 
   it('a Set can be created from an array', () => {
-    set = new Set([]);
     expect(Array.from(set)).toEqual(api);
   });
 
   it('`size` is the number of values', () => {
-    const theSize = set.count;
+    const theSize = set.size;
     expect(theSize).toBe(api.length);
   });
 
   it('`add()` appends the given value', () => {
+    set.add('DonaldJTrump');
     expect(set.size).toBe(api.length + 1);
   });
 
   it('`clear()` removes all elements', () => {
+    set.clear();
     expect(set.size).toBe(0);
   });
 
   it('`delete()` removes the given value', () => {
+    set.delete('size');
     expect(set.size).toBe(api.length - 1);
   });
 
   it('`entries()` returns an iterator for all values', () => {
     const expectedEntries = api.map(entry => [entry, entry]);
-    const actualEntries = set.entry;
+    const actualEntries = set.entries();
     expect([...actualEntries]).toEqual(expectedEntries);
   });
 
   it('`forEach()` calls a callback for each value', () => {
     const values = [];
-    set.map(value => values.push(value));
+    set.forEach(value => values.push(value));
     expect(values).toEqual(api);
   });
 
   it('`has()` returns true if the given value is in the set', () => {
-    const propertyName = '';
+    const propertyName = 'size';
     expect(set.has(propertyName)).toBe(true);
   });
 
@@ -197,17 +199,17 @@ describe('`Set` API overview', () => {
     // in order to be alike to `Map` `keys()` and `values()`
     // are essentially the same thing for a `Set`.
     it('`keys()`', () => {
-      const allKeys = Object.keys(set);
+      const allKeys = set.keys();
       expect([...allKeys]).toEqual(api);
     });
 
     it('`values()`', () => {
-      const allValues = set.value();
+      const allValues = set.values();
       expect([...allValues]).toEqual(api);
     });
 
     it('`[Symbol.iterator]()`', () => {
-      const iteratorKey = '???';
+      const iteratorKey = Symbol.iterator;
       expect([...set[iteratorKey]()]).toEqual(api);
     });
   });
