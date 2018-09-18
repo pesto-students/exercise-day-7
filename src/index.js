@@ -56,7 +56,20 @@ class ConsumableUsers {
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+const fibonacci = {
+  [Symbol.iterator]() {
+    let prev = 0;
+    let cur = 1;
+    return {
+      next() {
+        const next = prev + cur;
+        prev = cur;
+        cur = next;
+        return { value: next, done: false };
+      },
+    };
+  },
+};
 
 // 5 (*) (Q8 in tests)
 /*
