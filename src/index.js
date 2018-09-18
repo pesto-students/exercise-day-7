@@ -52,17 +52,38 @@ class ConsumableUsers {
   }
   get nextUser() {
     if (this.users.length > 0) {
-      const user = this.users[0];
-      this.users = this.users.splice(0, 1);
-      return `user: ${user}`;
+      const [firstUser, ...restUsers] = this.users;
+      this.users = restUsers;
+      return `user: ${firstUser}`;
     }
+    this._done = true;
     return undefined;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
-    return this.users.length === 0;
+    return this._done;
   }
 }
+
+const consumableUsers = new ConsumableUsers();
+
+function iteratorFunction() {
+  return {
+    next: () => ({
+      value: consumableUsers.nextUser,
+      done: consumableUsers.done,
+    }),
+  };
+}
+
+const usersIterable = {
+  [Symbol.iterator]: iteratorFunction,
+};
+
+
+const iterator = usersIterable[Symbol.iterator]();
+
+console.log(iterator.next());
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
