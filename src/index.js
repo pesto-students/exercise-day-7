@@ -80,7 +80,20 @@ function concat(obj1, obj2) {
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference(arr1, arr2) {
+  const set2 = new Set(arr2);
+  const set1 = new Set(arr1);
+
+  const diffArr = [];
+
+  set1.forEach((value) => {
+    if (!set2.has(value)) {
+      diffArr.push(value);
+    }
+  });
+
+  return diffArr;
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
