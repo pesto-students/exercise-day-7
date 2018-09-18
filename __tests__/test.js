@@ -175,7 +175,21 @@ describe('string is a built-in iterable object', () => {
   such as what values are looped over in a for..of construct.
 */
 describe('A simple iterable without items inside, implementing the right protocol', () => {
-  function iteratorFunction() {}
+  function iteratorFunction() {
+    const iterable = {
+      [Symbol.iterator]() {
+        const iterate = {
+          next() {
+            return {
+              done: true,
+            };
+          },
+        };
+        return iterate;
+      },
+    };
+    return iterable[Symbol.iterator]();
+  }
 
   describe('the `iteratorFunction` needs to comply to the iterator protocol', () => {
     it('must return an object', () => {
