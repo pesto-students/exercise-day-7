@@ -10,7 +10,7 @@ describe('`Set` lets you store unique values of any type', () => {
 
     set.add(1);
     set.add(1);
-    const expectedSize = 2;
+    const expectedSize = 1;
 
     expect(set.size).toBe(expectedSize);
   });
@@ -18,6 +18,7 @@ describe('`Set` lets you store unique values of any type', () => {
   it('the string "1" is different to the number 1', () => {
     const set = new Set();
     set.add(1);
+    set.add('1');
 
     expect(set.size).toBe(2);
   });
@@ -27,7 +28,7 @@ describe('`Set` lets you store unique values of any type', () => {
     set.add(NaN);
     set.add(NaN);
 
-    const expectedSize = 2;
+    const expectedSize = 1;
 
     expect(set.size).toBe(expectedSize);
   });
@@ -38,7 +39,7 @@ describe('`Set` lets you store unique values of any type', () => {
     set.add(0);
     set.add('-0');
 
-    const expected = [+0];
+    const expected = [0, '-0'];
 
     expect([...set.values()]).toEqual(expected);
   });
@@ -63,24 +64,24 @@ describe('`add()` appends a new element to the end of a Set object.', () => {
       fn,
     });
 
-    expect(set.size).toBe(2);
+    expect(set.size).toBe(3);
   });
 
   it('is chainable', () => {
-    // set.add.add;
+    set.add(2).add(3);
 
     expect(set.has(2)).toBe(true);
   });
 
   it('call without params adds undefined', () => {
-    // set.add
+    set.add();
 
     expect(set.has(undefined)).toBe(true);
   });
 
   it('0, -0 and +0 are equal', () => {
-    set.add();
-    set.add();
+    set.add(0);
+    set.add(-0);
 
     expect(set.has(+0)).toBe(true);
   });
@@ -101,10 +102,11 @@ describe('`set.delete()` deletes an element from a set', () => {
       set.add('one').add('two').add('three');
     });
     it('`delete()` returns `true` when the element was found', () => {
-      const returns = set.remove;
+      const returns = set.delete('one');
       expect(returns).toBe(true);
     });
     it('and the size decreases', () => {
+      set.delete('one');
       expect(set.size).toBe(2);
     });
   });
@@ -112,7 +114,7 @@ describe('`set.delete()` deletes an element from a set', () => {
   describe('if nothing was deleted (no element with the given value was found)', () => {
     it('returns `false`', () => {
       set.add('one');
-      const returns = set.delete('one');
+      const returns = set.delete('two');
 
       expect(returns).toBe(false);
     });
@@ -120,13 +122,14 @@ describe('`set.delete()` deletes an element from a set', () => {
 
   describe('`undefined` is a valid value in a set', () => {
     it('deleting it, when it is not in the set, returns `false` too', () => {
-      set.add(1);
+      set.add(undefined);
       // delete undefined from a set
       const elementToDelete = 1;
       expect(set.delete(elementToDelete)).toBe(false);
     });
 
     it('`delete()` removes it, when its in the set', () => {
+      set.add(undefined);
       expect(set.delete()).toBe(true);
     });
   });
@@ -135,7 +138,7 @@ describe('`set.delete()` deletes an element from a set', () => {
     it('number 1 is different to string "1"', () => {
       set.add(1);
       set.add('1');
-      expect(set.delete('1')).toBe(false);
+      expect(set.delete('1')).toBe(true);
     });
   });
 });
@@ -151,41 +154,44 @@ describe('`Set` API overview', () => {
   });
 
   it('a Set can be created from an array', () => {
-    set = new Set([]);
+    set = new Set(['size', 'add', 'clear', 'delete', 'entries', 'forEach', 'has', 'keys', 'values']);
     expect(Array.from(set)).toEqual(api);
   });
 
   it('`size` is the number of values', () => {
-    const theSize = set.count;
+    const theSize = set.size;
     expect(theSize).toBe(api.length);
   });
 
   it('`add()` appends the given value', () => {
+    set.add('new');
     expect(set.size).toBe(api.length + 1);
   });
 
   it('`clear()` removes all elements', () => {
+    set.clear();
     expect(set.size).toBe(0);
   });
 
   it('`delete()` removes the given value', () => {
+    set.delete('size');
     expect(set.size).toBe(api.length - 1);
   });
 
   it('`entries()` returns an iterator for all values', () => {
     const expectedEntries = api.map(entry => [entry, entry]);
-    const actualEntries = set.entry;
+    const actualEntries = set.entries();
     expect([...actualEntries]).toEqual(expectedEntries);
   });
 
   it('`forEach()` calls a callback for each value', () => {
     const values = [];
-    set.map(value => values.push(value));
+    set.forEach(value => values.push(value));
     expect(values).toEqual(api);
   });
 
   it('`has()` returns true if the given value is in the set', () => {
-    const propertyName = '';
+    const propertyName = 'size';
     expect(set.has(propertyName)).toBe(true);
   });
 
@@ -193,17 +199,17 @@ describe('`Set` API overview', () => {
     // in order to be alike to `Map` `keys()` and `values()`
     // are essentially the same thing for a `Set`.
     it('`keys()`', () => {
-      const allKeys = Object.keys(set);
+      const allKeys = set.keys();
       expect([...allKeys]).toEqual(api);
     });
 
     it('`values()`', () => {
-      const allValues = set.value();
+      const allValues = set.values();
       expect([...allValues]).toEqual(api);
     });
 
     it('`[Symbol.iterator]()`', () => {
-      const iteratorKey = '???';
+      const iteratorKey = Symbol.iterator;
       expect([...set[iteratorKey]()]).toEqual(api);
     });
   });
@@ -221,24 +227,24 @@ describe('`clear()` removes all elements from a Set object.', () => {
   it('set.size', () => {
     set.add('one').add(2);
     set.clear();
-    const expectedSize = 10000000;
+    const expectedSize = 0;
     expect(set.size).toBe(expectedSize);
   });
 
   it('set.entries()', () => {
     set.add('one').add(2);
-    // set.clear;
+    set.clear();
     const { done } = set.entries().next();
     expect(done).toBe(true);
   });
 
   it('set.has()', () => {
     set.add('one').add(2);
-    expect(set.has(2)).toBe(false);
+    expect(set.has(2)).toBe(true);
   });
 
   it('returns `undefined`', () => {
-    const expectedReturn = true;
+    const expectedReturn = undefined;
     expect(set.clear()).toBe(expectedReturn);
   });
 });

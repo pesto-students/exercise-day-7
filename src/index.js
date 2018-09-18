@@ -16,7 +16,13 @@
  */
 
 function ackermann(input) {
-  return input;
+  if (input.m === 0) {
+    return input.n + 1;
+  } else if (input.m > 0 && input.n === 0) {
+    return ackermann({ m: input.m - 1, n: 1 });
+  }
+
+  return ackermann({ m: input.m - 1, n: ackermann({ m: input.m, n: input.n - 1 }) });
 }
 
 /* Q2 (*)
@@ -30,8 +36,16 @@ function ackermann(input) {
  * aperture(7, [1, 2, 3, 4, 5]); //=> []
  */
 
-function aperture(input) {
-  return input;
+function aperture(n, input) {
+  if (n > input.length) {
+    return [];
+  }
+
+  const slicedArray = [input.slice(0, n)];
+  const [, ...restArr] = input;
+  const arr = aperture(n, restArr);
+  slicedArray.push(...arr);
+  return slicedArray;
 }
 
 /* Q3 (*)
@@ -51,7 +65,10 @@ function aperture(input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+function concat(obj1, obj2) {
+  const concatObj = obj1.concat(obj2);
+  return concatObj;
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -63,7 +80,20 @@ function concat() {}
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() {}
+function difference(arr1, arr2) {
+  const set2 = new Set(arr2);
+  const set1 = new Set(arr1);
+
+  const diffArr = [];
+
+  set1.forEach((value) => {
+    if (!set2.has(value)) {
+      diffArr.push(value);
+    }
+  });
+
+  return diffArr;
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
@@ -83,7 +113,29 @@ function difference() {}
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() {}
+function invertArrayObj(arr) {
+  const invObj = {};
+  arr.forEach((val, index) => {
+    invObj[val] = index.toString();
+  });
+  return invObj;
+}
+
+function invertObj(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return {};
+  }
+
+  if (Array.isArray(obj)) {
+    return invertArrayObj(obj);
+  }
+
+  const invObj = {};
+  Object.keys(obj).forEach((key) => {
+    invObj[obj[key]] = key;
+  });
+  return invObj;
+}
 
 
 module.exports = {
