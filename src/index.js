@@ -123,7 +123,14 @@ class Cycled extends Array { }
 // 8 (*) (Q11 in tests)
 // range(1, 5)
 // => [1, 2, 3, 4, 5]
-function range() { }
+function range(a, b) {
+  if (typeof a !== 'number' || typeof b !== 'number') {
+    throw new TypeError('undefined is not a number');
+  }
+  const ret = [];
+  for (let i = a; i <= b; i += 1) ret.push(i);
+  return ret;
+}
 
 module.exports = {
   simpleIterable,
