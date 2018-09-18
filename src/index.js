@@ -73,7 +73,13 @@ function concat(a, b) {
  *      difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
  */
 
-function difference() { }
+function difference(a, b) {
+  const ret = [];
+  a.forEach((elem) => {
+    if (b.indexOf(elem) === -1 && ret.indexOf(elem) === -1) ret.push(elem);
+  });
+  return ret;
+}
 
 /* Q5 (*)
  * Returns a new object with the keys of the given object as values, and the
