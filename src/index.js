@@ -32,7 +32,11 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let num = 1;
+  while (num <= 5) {
+    yield num;
+    num += 1;
+  }
 }
 
 /* 3 (Q6 in tests)
