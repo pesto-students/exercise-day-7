@@ -65,7 +65,10 @@ function aperture(n, input) {
  *    concat([], []); //=> []
  */
 
-function concat() {}
+function concat(obj1, obj2) {
+  const concatObj = obj1.concat(obj2);
+  return concatObj;
+}
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
