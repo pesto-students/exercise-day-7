@@ -43,10 +43,13 @@ class ConsumableUsers {
   }
   get nextUser() {
     // Implement this according to test spec (for creating iterable)
-    return [];
+    if (this.users.length === 0) return undefined;
+    return `user: ${this.users.shift()}`;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
+    if (this._done) return true;
+    if (this.users.length === 0) this._done = true;
     return false;
   }
 }
