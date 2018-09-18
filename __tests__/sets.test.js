@@ -10,7 +10,7 @@ describe('`Set` lets you store unique values of any type', () => {
 
     set.add(1);
     set.add(1);
-    const expectedSize = 2;
+    const expectedSize = 1;
 
     expect(set.size).toBe(expectedSize);
   });
@@ -18,6 +18,7 @@ describe('`Set` lets you store unique values of any type', () => {
   it('the string "1" is different to the number 1', () => {
     const set = new Set();
     set.add(1);
+    set.add('1');
 
     expect(set.size).toBe(2);
   });
@@ -27,7 +28,7 @@ describe('`Set` lets you store unique values of any type', () => {
     set.add(NaN);
     set.add(NaN);
 
-    const expectedSize = 2;
+    const expectedSize = 1;
 
     expect(set.size).toBe(expectedSize);
   });
@@ -36,7 +37,7 @@ describe('`Set` lets you store unique values of any type', () => {
     const set = new Set();
     set.add(+0);
     set.add(0);
-    set.add('-0');
+    set.add(-0);
 
     const expected = [+0];
 
