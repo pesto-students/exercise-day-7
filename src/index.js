@@ -99,7 +99,17 @@ function difference(a, b) {
  *      //=> { 'alice': '0', 'jake':'1' }
  */
 
-function invertObj() { }
+function invertObj(obj) {
+  const ret = {};
+
+  if (typeof obj !== 'object' || obj === null) return ret;
+
+  const keys = Object.keys(obj);
+  for (let i = 0; i < keys.length; i += 1) {
+    ret[obj[keys[i]]] = keys[i];
+  }
+  return ret;
+}
 
 
 module.exports = {
