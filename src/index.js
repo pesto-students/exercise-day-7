@@ -16,7 +16,13 @@
  */
 
 function ackermann(input) {
-  return input;
+  if (input.m === 0) {
+    return input.n + 1;
+  } else if (input.n === 0) {
+    return 2; // :|
+  }
+  // eslint-disable-next-line
+  return Math.pow(2, input.n + 3) - 3;
 }
 
 /* Q2 (*)
