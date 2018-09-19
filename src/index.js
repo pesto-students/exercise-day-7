@@ -94,7 +94,9 @@ const fibonacci = generateFibonacci();
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(iterable) {
+  return iterable[Symbol.iterator]().next().done;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
