@@ -64,30 +64,25 @@ class ConsumableUsers {
     return this._done;
   }
 }
-
-const consumableUsers = new ConsumableUsers();
-
-function iteratorFunction() {
-  return {
-    next: () => ({
-      value: consumableUsers.nextUser,
-      done: consumableUsers.done,
-    }),
-  };
-}
-
-const usersIterable = {
-  [Symbol.iterator]: iteratorFunction,
-};
-
-
-const iterator = usersIterable[Symbol.iterator]();
-
-console.log(iterator.next());
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+// const fibonacci = {};
+function* generateFibonacci() {
+  let f1 = 0;
+  yield f1;
+  let f2 = 1;
+  yield f2;
+  let currentValue = 1;
+
+  while (true) {
+    currentValue = f1 + f2;
+    yield currentValue;
+    f1 = f2;
+    f2 = currentValue;
+  }
+}
+const fibonacci = generateFibonacci();
 
 // 5 (*) (Q8 in tests)
 /*
