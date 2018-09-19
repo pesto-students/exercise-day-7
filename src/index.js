@@ -2,14 +2,41 @@
 Create an iterable without using generator function.
 See the tests for this function to get the spec.
 */
-function simpleIterable() {}
+function simpleIterable() {
+  const iterable = {
+    [Symbol.iterator]() {
+      let num = 0;
+      const iterator = {
+        next() {
+          num += 1;
+          if (num > 5) {
+            return {
+              value: undefined,
+              done: true,
+            };
+          }
+          return {
+            value: num,
+            done: false,
+          };
+        },
+      };
+      return iterator;
+    },
+  };
+  return iterable;
+}
 
 /* 2 (*)
 Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let num = 1;
+  while (num <= 5) {
+    yield num;
+    num += 1;
+  }
 }
 
 /* 3 (Q6 in tests)
@@ -24,18 +51,38 @@ class ConsumableUsers {
     this._done = false;
   }
   get nextUser() {
-    // Implement this according to test spec (for creating iterable)
-    return [];
+    if (this.users.length > 0) {
+      const [firstUser, ...restUsers] = this.users;
+      this.users = restUsers;
+      return `user: ${firstUser}`;
+    }
+    this._done = true;
+    return undefined;
   }
   get done() {
     // Implement this according to test spec (for creating iterable)
-    return false;
+    return this._done;
   }
 }
 /* eslint-enable no-underscore-dangle, class-methods-use-this */
 
 // 4 (*) (Q7 in tests)
-const fibonacci = {};
+// const fibonacci = {};
+function* generateFibonacci() {
+  let f1 = 0;
+  yield f1;
+  let f2 = 1;
+  yield f2;
+  let currentValue = 1;
+
+  while (true) {
+    currentValue = f1 + f2;
+    yield currentValue;
+    f1 = f2;
+    f2 = currentValue;
+  }
+}
+const fibonacci = generateFibonacci();
 
 // 5 (*) (Q8 in tests)
 /*
@@ -47,7 +94,9 @@ const fibonacci = {};
 
   Do not use Array.from()
 */
-function isIterableEmpty() {}
+function isIterableEmpty(iterable) {
+  return iterable[Symbol.iterator]().next().done;
+}
 
 /* 6 (*) (Q9 in tests)
   isIterable([ 1, 2, 3 ]) // true
@@ -56,7 +105,9 @@ function isIterableEmpty() {}
   isIterable({ key: 'value' }) // false
   isIterable(new Map()) // true
 */
-function isIterable() {}
+function isIterable(iterable) {
+  return typeof iterable[Symbol.iterator] === 'function';
+}
 
 /* 7 (Q10 in tests)
   Create a class that is used to iterate over an array in a circular way;

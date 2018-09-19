@@ -86,13 +86,13 @@ describe('Array is a built-in iterable object', () => {
       const iterator = arr[Symbol.iterator];
       const theType = typeof iterator;
 
-      expect(theType).toBe('iterator'); // 1) typeof iterator === 'iterator'?
+      expect(theType).toBe('function'); // 1) typeof iterator === 'iterator'?
     });
 
     it('can be looped with `for-of`, which expects an iterable', () => {
       let count = 0;
       for (const value of arr) { // 2) Would for-of work on a normal Array?
-        count -= 1;
+        count += 1;
       }
 
       expect(count).toBe(arr.length);
@@ -102,7 +102,7 @@ describe('Array is a built-in iterable object', () => {
   describe('the iterator protocol', () => {
     it('calling `next()` on an iterator returns an object according to the iterator protocol', () => {
       const iterator = arr[Symbol.iterator]();
-      const firstItem = iterator.xyz(); // 3) What is the method to iterate to the next iteration?
+      const firstItem = iterator.next(); // 3) What is the method to iterate to the next iteration?
 
       expect(firstItem).toEqual({
         done: false,
@@ -114,7 +114,7 @@ describe('Array is a built-in iterable object', () => {
     it('the after-last element has done=true', () => {
       const array = [];
       const iterator = array[Symbol.iterator]();
-      const afterLast = iterator.next;
+      const afterLast = iterator.next();
 
       expect(afterLast).toEqual({
         done: true,
@@ -130,12 +130,12 @@ describe('string is a built-in iterable object', () => {
 
   describe('string is iterable', () => {
     it('the string`s object key `Symbol.iterator` is a function', () => {
-      const stringIterator = string;
+      const stringIterator = string[Symbol.iterator];
       expect(typeof stringIterator).toBe('function');
     });
 
     it('use `Array.from()` to make an array out of any iterable', () => {
-      const arr = string;
+      const arr = Array.from(string);
       expect(arr).toEqual(['a', 'b', 'c']);
     });
   });
@@ -147,13 +147,13 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('has a special string representation', () => {
-      const description = iterator.toxyz();
+      const description = iterator.toString();
 
-      expect(description).toBe('[object String Iterator]');
+      expect(description.toString()).toBe('[object String Iterator]');
     });
 
     it('`iterator.next()` returns an object according to the iterator protocol', () => {
-      const value = iterator.xyz();
+      const value = iterator.next();
       expect(value).toEqual({
         done: false,
         value: 'a',
@@ -161,6 +161,8 @@ describe('string is a built-in iterable object', () => {
     });
 
     it('the after-last call to `iterator.next()` says done=true, no more elements', () => {
+      iterator.next();
+      iterator.next();
       iterator.next();
       expect(iterator.next().done).toBe(true);
     });
@@ -173,7 +175,15 @@ describe('string is a built-in iterable object', () => {
   such as what values are looped over in a for..of construct.
 */
 describe('A simple iterable without items inside, implementing the right protocol', () => {
-  function iteratorFunction() {}
+  function iteratorFunction() {
+    return {
+      next() {
+        return {
+          done: true,
+        };
+      },
+    };
+  }
 
   describe('the `iteratorFunction` needs to comply to the iterator protocol', () => {
     it('must return an object', () => {
@@ -191,7 +201,9 @@ describe('A simple iterable without items inside, implementing the right protoco
 
   let iterable;
   beforeEach(() => {
-    iterable = 'iterable';
+    iterable = {
+      [Symbol.iterator]: iteratorFunction,
+    };
   });
 
   describe('the iterable', () => {
@@ -205,7 +217,7 @@ describe('A simple iterable without items inside, implementing the right protoco
 
   describe('using the iterable', () => {
     it('it contains no values', () => {
-      let values;
+      let values = '';
       for (const value of iterable) {
         values += value;
       }
@@ -252,7 +264,9 @@ describe('Iterator usages', () => {
       };
     }
 
-    usersIterable = {};
+    usersIterable = {
+      [Symbol.iterator]: iteratorFunction,
+    };
   });
 
   describe('create an iterator/iterable', () => {
@@ -276,7 +290,7 @@ describe('Iterator usages', () => {
     describe('using the iterator', () => {
       let iterator;
       beforeEach(() => {
-        iterator = usersIterable[Symbol.iterator];
+        iterator = usersIterable[Symbol.iterator]();
       });
 
       it('should return `Alice` as first user', () => {
@@ -288,6 +302,7 @@ describe('Iterator usages', () => {
       });
 
       it('should return `Bob` as second user', () => {
+        iterator.next();
         const secondItem = iterator.next();
         expect(secondItem).toEqual({
           value: 'user: Bob',
@@ -297,7 +312,7 @@ describe('Iterator usages', () => {
 
       it('should return `done:true`, which means there are no more items', () => {
         iterator.next();
-        iterator.xyz();
+        iterator.next();
         const beyondLast = iterator.next();
         expect(beyondLast).toEqual({
           value: undefined,
@@ -308,25 +323,28 @@ describe('Iterator usages', () => {
 
     describe('using built-in constructs', () => {
       it('use `Array.from()` to convert the iterable to an array (which is also iterable)', () => {
-        const users = usersIterable;
+        const users = Array.from(usersIterable);
         expect(users).toEqual(['user: Alice', 'user: Bob']);
       });
 
       it('use for-of to loop over an iterable', () => {
         const users = [];
+        for (const user of usersIterable) {
+          users.push(user);
+        }
         expect(users).toEqual(['user: Alice', 'user: Bob']);
       });
 
       it('use the spread-operator to convert/add iterable to an array', () => {
-        const users = [];
+        const users = ['noname', ...usersIterable];
         expect(users).toEqual(['noname', 'user: Alice', 'user: Bob']);
       });
 
       it('destructure an iterable like an array', () => {
-        const {
+        const [
           firstUser,
           secondUser,
-        } = usersIterable;
+        ] = usersIterable;
         expect(firstUser).toBe('user: Alice');
         expect(secondUser).toBe('user: Bob');
       });
